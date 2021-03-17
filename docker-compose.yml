@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  crawl:
+    image: gpu_crawler:0.1
+    build: .
+    volumes: 
+      - .:/src
+    command: >
+      bash -c "python3 crawler.py"
+

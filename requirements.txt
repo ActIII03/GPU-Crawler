@@ -1,0 +1,5 @@
+Scrapy>=2.0
+selenium>=3.0
+Pillow>=8.0
+logger>=1.0
+requests>=2.0

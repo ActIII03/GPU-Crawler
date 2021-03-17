@@ -1,0 +1,7 @@
+1615849937018	geckodriver	INFO	Listening on 127.0.0.1:35645
+1615851884185	geckodriver	INFO	Listening on 127.0.0.1:52723
+1615851884189	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileYA6juf"
+Running Firefox as root in a regular user's session is not supported.  ($HOME is /home/seluser which is owned by seluser.)
+1615948232317	geckodriver	INFO	Listening on 127.0.0.1:46503
+1615948233321	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--disable-notifications" "--headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilebSjmO8"
+Running Firefox as root in a regular user's session is not supported.  ($HOME is /home/seluser which is owned by seluser.)
