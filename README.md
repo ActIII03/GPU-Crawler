@@ -9,4 +9,4 @@ Description: Crawl ecommerce websites to check 30XX RTX GPU's are instock (Event
 
 ## Steps to run:
 1. <code>git clone https://github.com/ActIII03/GPU-Crawler </code>
-2. <code> sudo docker-compose up
+2. <code> sudo docker-compose up </code>
