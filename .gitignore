@@ -2,4 +2,5 @@ items.json
 .*.*.swp
 __pycache__
 website_css_crawler/__pycache__
+website_css_crawler/spiders/__pycache__
 
