@@ -1,7 +1,6 @@
 import scrapy
 import pdb
 import logging
-from scrapy.http import Request
 
 class InstockGPU(scrapy.Spider):
     name = "BestBuyGPU"
@@ -11,26 +10,34 @@ class InstockGPU(scrapy.Spider):
 
     def __init__(self):
         self.count = 0
+        self.page_number = 0
 
     def parse(self, response):
         logger = logging.getLogger('mycustomlogger')
-        item_list = response.css('ol.sku-item-list .sku-item')       
+        yield self.parse_listing(response)
+        next_page = response.css('a.sku-list-page-next::attr(href)').get()
+        logger.info("Getting information from: %s", next_page)
+        if next_page is not None:
+            yield scrapy.Request(url=next_page, callback=self.parse_listing, dont_filter=True)           
+            del(next_page)
+
+
+    def parse_listing(self, response):
+        item_list = response.css('ol.sku-item-list .sku-item')
+        found_items = {}
         num_item = len(response.css('div.sku-title h4.sku-header a::text').getall())
-        while self.count < num_item - 1:
-            self.count += 1
+        index = 0
+        while index <= num_item - 1:
             item = {
-                'title': item_list[self.count].css('div.sku-title h4.sku-header a::text').get(),
-                'sku': item_list[self.count].css('div.sku-attribute-title span.sku-value::text').extract()[1],
+                'title': item_list[index].css('div.sku-title h4.sku-header a::text').get(),
+                'sku': item_list[index].css('div.sku-attribute-title span.sku-value::text').extract()[1],
                 'price':  item_list.css('div.priceView-hero-price.priceView-customer-price span::text').extract()[0],
                 'in-stock': False,
             }
             # Check if stock
             if(item_list.css('button.btn::text').get()[1] == "Sold Out"):
                item['in-stock'] = True
-
-            yield item
-
-        next_page = response.css('li.page-item a.trans-button.page-number::attr(href)').get()
-        if next_page is not None:
-           yield Request(next_page, callback=self.parse)           
-
+            found_items[self.count] = item
+            index += 1
+            self.count += 1
+        return found_items
