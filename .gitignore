@@ -3,4 +3,5 @@ items.json
 __pycache__
 website_css_crawler/__pycache__
 website_css_crawler/spiders/__pycache__
+utils/__pycache__
 
