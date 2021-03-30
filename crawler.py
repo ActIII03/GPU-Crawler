@@ -1,6 +1,7 @@
 import scrapy
 import os
 import pdb
+import sys
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from website_css_crawler.spiders.bestbuy import *
@@ -16,24 +17,27 @@ class GPUCrawler:
                 InstockGPU,
         ]
         self.spider_count = 1
-
     # Run list of spiders
     def run_spiders(self):
         #breakpoint()
         self.process.crawl(self.spiders[0])
         self.process.start()
-
-# Main driver of application
+# Main driver of application that intakes phone number as argv
 def main():
-
+    # Intake desired phone number
+    phone_number = sys.argv[1]
+    if(phone_number == None):
+        print("Please provide desired phone number via docker-compose's cmd argv\n")
+        print("Example: python3 crawler.py <phone_number\n")
+        quit()
     # Scrape ecommerce website(s) for GPU data
-    gpu_crawler = GPUCrawler()
-    gpu_crawler.run_spiders()
+    # gpu_crawler = GPUCrawler()
+    # gpu_crawler.run_spiders()
     # Clean data and notify 
     not_sys = notification.NotificationSys()
-    not_sys.run()
-
+    not_sys.run(phone_number)
 
 if __name__=="__main__":
     main()
     exit()
+

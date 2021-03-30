@@ -3,7 +3,7 @@ import logging
 
 class InstockGPU(scrapy.Spider):
     name = "BestBuyGPU"
-    base_url = 'https://www.bestbuy.com'
+    base_url = 'https://api.bestbuy.com/click/~/'
     start_urls = [
             'https://www.bestbuy.com/site/computer-cards-components/video-graphics-cards/abcat0507002.c?id=abcat0507002&qp=gpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%202060%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%202080%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203060%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203060%20Ti%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203070%5Egpusv_facet%3DG',
     ]
@@ -31,7 +31,7 @@ class InstockGPU(scrapy.Spider):
                 'sku': item_list[index].css('div.sku-attribute-title span.sku-value::text').extract()[1],
                 'price':  item_list.css('div.priceView-hero-price.priceView-customer-price span::text').extract()[0],
                 'in-stock': False,
-                'url': self.base_url + item_list[index].css('div.sku-title h4.sku-header a::attr(href)').get(),
+                'sku': self.base_url + item_list[index].css('div.sku-attribute-title span.sku-value::text').extract()[1] + "/cart",
             }
             # Check if stock
             if(item_list.css('button.btn::text').get()[1] == "Sold Out"):

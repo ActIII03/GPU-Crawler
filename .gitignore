@@ -4,4 +4,7 @@ __pycache__
 website_css_crawler/__pycache__
 website_css_crawler/spiders/__pycache__
 utils/__pycache__
-
+geckodriver.log
+utils/__pycache__
+.aws/credentials
+.bash_history
