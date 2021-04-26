@@ -25,7 +25,6 @@ class JsonWriterPipeline:
         self.file.close()
 
     def process_item(self, item, spider):
-        for i in range(0, len(item)):
+        for i in range(0, len(item) - 1):
             self.exporter.export_item(item[i])
         return item
-

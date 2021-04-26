@@ -1,11 +1,11 @@
 import json
 import boto3
-import pdb
 import csv
 import re
 import os
 import logging
 
+# Notification System
 class NotificationSys:
     # Copy-Constructor
     def __init__(self):
@@ -27,20 +27,10 @@ class NotificationSys:
                 json_file.close()
             except IOError:
                 logging.exception('')
-    # Open csv file for AWS's IAM credential
-    # def readin_csv(self):
-    #     try:
-    #         csvfile = list(csv.reader(open(self.file_name, 'r'), delimiter='\n'))
-    #         self.accesskey_id = re.sub('[\[\[\]\'<>]','',str(csvfile[1]))
-    #         self.secret_key = re.sub('[\[\[\]\'<>]','',str(csvfile[2]))
-    #     except IOError:
-    #         logging.exception('')
-    #     if(csvfile == None):
-    #         raise ValueError('NO AWS IAM Cred.\'s\n Ensure AWS IAM Cred. (.csv) is located in ~/utils/ dir in order for docker env to see cred\'s')
     # Check if in-stock
     def check_if_stock(self) -> "bool":
         flag = False
-        for gpu_card in range(0, len(self.gpu_data)):
+        for gpu_card in range(0, len(self.gpu_data) - 1):
             if(self.gpu_data[gpu_card]["in-stock"] == True):
                 self.in_stock[self.count] = self.gpu_data[gpu_card]
                 flag = True
@@ -48,24 +38,37 @@ class NotificationSys:
         return flag
     # Send sms
     def send_msg(self, phone_number):
-        # Get ENV var's for AWS's IAM credentials
+        # Get ENV var's w/in the running Docker instance for AWS's IAM credential verification process
         client = boto3.client(
                 "sns",
                 aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID').strip("\""),
                 aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY').strip("\""),
                 region_name=os.getenv('AWS_REGION').strip("\""),
         )                
-        # Publish SMS
-        # text_message = ["index: "
+        # Publish SMS <-- work on last
         return None
-    # Core of notification sys
+    # Readout in-stock GPUs' to text-file (.txt)
+    def readout_instock(self) -> "None":
+        # Open text file
+        with open("instock_gpu.txt", "w") as instock_file:
+            for item in self.in_stock:
+                instock_file.write('%d) Item: %s; Price: %s; Add-to-cart: %s\n' % (
+                     item,
+                     self.in_stock[item]["title"],
+                     self.in_stock[item]["price"],
+                     self.in_stock[item]["sku"],
+                     )
+                )
+        instock_file.close()
+    # Core of notification sys (main driver)
     def run(self, phone_number):
         # Open file
         self.readin_json()
+        # Check if GPU's are stocked
         stock_status = self.check_if_stock()
-        # self.readin_csv()
-        breakpoint()
+        # If stocked, then send to client: (i) text-message (ii) email of add-to-cart links
         if(stock_status == True):            
-            self.readin_csv()
             sent = self.send_msg(phone_number)
+            # Write in-stock GPU's to text file
+            self.readout_instock()
 

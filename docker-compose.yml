@@ -8,10 +8,10 @@ services:
       - .:/home/gpu_crawler
     # Set AWS IAM credentials here to be passed into docker container
     environment:
-      - AWS_ACCESS_KEY_ID= <aws_access_key_id>
-      - AWS_SECRET_ACCESS_KEY= <aws_secret_access_key>
+      - AWS_ACCESS_KEY_ID= <access-key-id>
+      - AWS_SECRET_ACCESS_KEY= <secret-access>
       - AWS_REGION= "us-west-2"
-    # Add desired phone number as <phone_number>
+    # Add desired phone number as 16674443232
     command: >
-      bash -c "python3 crawler.py <phone_number>"
+      bash -c "python3 crawler.py <phone-number-here>"
 

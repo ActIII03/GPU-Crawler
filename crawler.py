@@ -1,6 +1,5 @@
 import scrapy
 import os
-import pdb
 import sys
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -18,12 +17,11 @@ class GPUCrawler:
         ]
         self.spider_count = 1
     # Run list of spiders
-    def run_spiders(self):
-        #breakpoint()
+    def run_spiders(self) -> "None":
         self.process.crawl(self.spiders[0])
         self.process.start()
 # Main driver of application that intakes phone number as argv
-def main():
+def main() -> "None":
     # Intake desired phone number
     phone_number = sys.argv[1]
     if(phone_number == None):
@@ -31,9 +29,9 @@ def main():
         print("Example: python3 crawler.py <phone_number\n")
         quit()
     # Scrape ecommerce website(s) for GPU data
-    # gpu_crawler = GPUCrawler()
-    # gpu_crawler.run_spiders()
-    # Clean data and notify 
+    gpu_crawler = GPUCrawler()
+    gpu_crawler.run_spiders()
+    # Wrangle data for textfile and notify via SMS
     not_sys = notification.NotificationSys()
     not_sys.run(phone_number)
 

@@ -1,6 +1,6 @@
 import scrapy
-import logging
 
+# BestBuy GPU crawler
 class InstockGPU(scrapy.Spider):
     name = "BestBuyGPU"
     base_url = 'https://api.bestbuy.com/click/~/'
@@ -12,10 +12,8 @@ class InstockGPU(scrapy.Spider):
         self.page_number = 0
     # Scrape Bestbuy's GPU page
     def parse(self, response):
-        logger = logging.getLogger('mycustomlogger')
         yield self.parse_listing(response)
         next_page = response.css('a.sku-list-page-next::attr(href)').get()
-        logger.info("Getting information from: %s", next_page)
         if next_page is not None:
             yield scrapy.Request(url=next_page, callback=self.parse_listing, dont_filter=True)           
             del(next_page)
