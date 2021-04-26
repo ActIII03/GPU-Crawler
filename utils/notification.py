@@ -45,7 +45,12 @@ class NotificationSys:
                 aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY').strip("\""),
                 region_name=os.getenv('AWS_REGION').strip("\""),
         )                
-        # Publish SMS <-- work on last
+        # Publish SMS 
+        message = "There are {0} GPU's instock".format(len(self.in_stock))
+        client.publish(
+                PhoneNumber=phone_number,
+                Message=message,
+        )
         return None
     # Readout in-stock GPUs' to text-file (.txt)
     def readout_instock(self) -> "None":

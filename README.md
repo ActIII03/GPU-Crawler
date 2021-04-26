@@ -1,5 +1,5 @@
 # Program: GPU-Crawler
-Description: Crawl ecommerce websites to check 30XX RTX GPU's are instock  
+Description: Crawl ecommerce websites to check if 30XX RTX series GPU's are instock  
 
 ## Dependencies
 1. Docker >= 20.10
